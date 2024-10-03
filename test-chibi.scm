@@ -8,7 +8,6 @@
         (chibi test)
         (srfi 1)
         (srfi 128)
-        (srfi 189)
         (srfi 224))
 
 ;;; SRFI 64 shim
