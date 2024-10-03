@@ -2,46 +2,9 @@
 ;;;
 ;;; SPDX-License-Identifier: MIT
 
-(define-library (srfi 224)
-  (import (except (scheme base) error)
-          (prefix (only (scheme base) error) r7rs:)
-          (scheme case-lambda)
-          (only (srfi 1) fold every)
-          (only (srfi 128) comparator? =?)
-          (srfi 143))
+;;; R6RS library file written for ChezScheme.
 
-  (cond-expand
-    ((library (srfi 145))
-     (import (srfi 145)))
-    (else
-     (begin
-      (define-syntax assume
-        (syntax-rules ()
-          ((_ expr . _)
-           (or expr (car 0))))))))
-
-  (cond-expand
-    ((library (srfi 158))
-     (import (only (srfi 158) make-coroutine-generator)))
-    (else
-     (begin
-      ;; From the SRFI 158 sample impl. by Kawai, Cowan, & Gilray.
-      ;; (MIT license)
-      (define (make-coroutine-generator proc)
-        (define return #f)
-        (define resume #f)
-        (define (yield v)
-          (call/cc (lambda (r) (set! resume r) (return v))))
-        (lambda ()
-          (call/cc
-           (lambda (cc)
-             (set! return cc)
-             (if resume
-                 (resume (if #f #f))  ; void? or yield again?
-                 (begin (proc yield)
-                        (set! resume (lambda (v) (return (eof-object))))
-                        (return (eof-object)))))))))))
-
+(library (srfi :224)
   (export
    ;; Constructors
    fxmapping fxmapping-unfold fxmapping-accumulate alist->fxmapping
@@ -91,16 +54,16 @@
    fxmapping-split
    )
 
-  (begin
-   ;; Shim for R6RS 'error'.
-   (define (error who message . irritants)
-     (apply r7rs:error
-            (string-append (if (symbol? who)
-                               (symbol->string who)
-                               who)
-                           ": "
-                           message)
-            irritants)))
+  (import (rnrs base (6))
+          (rnrs control (6))
+          (rnrs lists (6))
+          (only (srfi :1) fold every)
+          (srfi :9)
+          (only (srfi :128) comparator? =?)
+          (srfi :143)
+          (srfi :145)
+          (only (srfi :158) make-coroutine-generator)
+          (only (chezscheme) include))
 
   (include "matchers.scm")
   (include "trie.scm")

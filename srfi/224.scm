@@ -10,7 +10,7 @@
       (() b)
       ((,k ,v . ,ps*)
        (loop (proc k v b) ps*))
-      (else (error "plist-fold: invalid plist")))))
+      (else (error 'plist-fold "invalid plist")))))
 
 (define (first-arg _k x _y) x)
 (define (second-arg _k _x y) y)
@@ -120,7 +120,8 @@
     ((fxmap key)
      (fxmapping-ref fxmap
                     key
-                    (lambda () (error "fxmapping-ref: key not found"
+                    (lambda () (error 'fxmapping-ref
+                                      "key not found"
                                       key
                                       fxmap))
                     values))
@@ -216,7 +217,7 @@
                        key
                        success
                        (lambda ()
-                         (error "fxmapping-update: key not found" key fxmap))))
+                         (error 'fxmapping-update "key not found" key fxmap))))
     ((fxmap key success failure)
      (assume (fxmapping? fxmap))
      (assume (valid-integer? key))

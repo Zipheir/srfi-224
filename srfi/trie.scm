@@ -361,7 +361,7 @@
        ((leaf ,k ,v) (values k v))
        ((branch ? ? ,l ?) (search l)))))
     (tmatch trie
-      (empty (error "empty trie"))
+      (empty (error 'trie-min "empty trie"))
       ((leaf ,k ,v) (values k v))
       ((branch ? ,m ,l ,r)
        (if (fxnegative? m) (search r) (search l))))))
@@ -393,7 +393,7 @@
   (letrec
    ((pop
      (tmatch-lambda
-       (empty (error "trie-pop-min: empty trie"))
+       (empty (error 'trie-pop-min "empty trie"))
        ((leaf ,k ,v) (values k v the-empty-trie))
        ((branch ,p ,m ,l ,r)
         (let-values (((k v l*) (pop l)))
@@ -414,7 +414,7 @@
        ((leaf ,k ,v) (values k v))
        ((branch ? ? ? ,r) (search r)))))
     (tmatch trie
-      (empty (error "empty trie"))
+      (empty (error 'trie-max "empty trie"))
       ((branch ? ,m ,l ,r)
        (if (fxnegative? m) (search l) (search r)))
       ((leaf ,k ,v) (values k v)))))
@@ -446,7 +446,7 @@
   (letrec
    ((pop
      (tmatch-lambda
-       (empty (error "trie-pop-max: empty trie"))
+       (empty (error 'trie-pop-max "empty trie"))
        ((leaf ,k ,v) (values k v the-empty-trie))
        ((branch ,p ,m ,l ,r)
         (let-values (((k v r*) (pop r)))
